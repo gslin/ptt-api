@@ -1,0 +1,2 @@
+uwsgi>=0
+websockets>=0
