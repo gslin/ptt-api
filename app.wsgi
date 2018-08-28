@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import configparser
 import bottle
 
 app = application = bottle.Bottle()
@@ -17,6 +18,12 @@ def robotstxt():
 def user(username):
     origin = 'https://term.ptt.cc'
     uri = 'wss://ws.ptt.cc/bbs'
+
+    config = configparser.ConfigParser()
+    config.read('{}/.config/ptt-id/account.ini'.format(os.environ['HOME']))
+
+    login_password = config['default']['password']
+    login_username = config['default']['username']
 
 if __name__ == '__main__':
     if os.environ.get('PORT'):
