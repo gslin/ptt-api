@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import configparser
 import bottle
+import configparser
+import re
 
 app = application = bottle.Bottle()
 
@@ -24,6 +25,8 @@ def user(username):
 
     login_password = config['default']['password']
     login_username = config['default']['username']
+
+    home_re = re.compile('《上次故鄉》(\d+\.\d+\.\d+\.\d+)')
 
 if __name__ == '__main__':
     if os.environ.get('PORT'):
