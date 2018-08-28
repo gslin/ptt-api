@@ -13,6 +13,11 @@ def robotstxt():
     bottle.response.set_header('Content-Type', 'text/plain')
     return '#\nUser-agent: *\nDisallow: /\n'
 
+@app.route('/user/<username>')
+def user(username):
+    origin = 'https://term.ptt.cc'
+    uri = 'wss://ws.ptt.cc/bbs'
+
 if __name__ == '__main__':
     if os.environ.get('PORT'):
         port = int(os.environ.get('PORT'))
