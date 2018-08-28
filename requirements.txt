@@ -1,3 +1,4 @@
+bottle>=0
 coverage>=0
 nose>=0
 uwsgi>=0
