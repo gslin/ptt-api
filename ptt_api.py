@@ -30,7 +30,7 @@ async def get_user_ip(username):
 
     home_re = re.compile('《上次故鄉》(\d+\.\d+\.\d+\.\d+)')
 
-    async with websockets.connect(uri, origin=origin) as ws:
+    async with websockets.connect(uri, timeout=3, origin=origin) as ws:
         buf = ''
         while True:
             r = await ws.recv()
