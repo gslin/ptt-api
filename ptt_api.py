@@ -24,7 +24,7 @@ def user(username):
     uri = 'wss://ws.ptt.cc/bbs'
 
     config = configparser.ConfigParser()
-    config.read('{}/.config/ptt-id/account.ini'.format(os.environ['HOME']))
+    config.read('{}/.config/ptt-api/account.ini'.format(os.environ['HOME']))
 
     login_password = config['default']['password']
     login_username = config['default']['username']
