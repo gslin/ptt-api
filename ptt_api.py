@@ -3,6 +3,7 @@
 import asyncio
 import bottle
 import configparser
+import json
 import os
 import re
 import websockets
@@ -82,7 +83,7 @@ def user(username):
     ip = loop.run_until_complete(asyncio.gather(get_user_ip(username)))
     loop.close()
 
-    return ip
+    return json.dumps({'ip': ip})
 
 if __name__ == '__main__':
     if os.environ.get('PORT'):
