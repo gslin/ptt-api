@@ -30,6 +30,50 @@ async def get_user_ip(username):
 
     home_re = re.compile('《上次故鄉》(\d+\.\d+\.\d+\.\d+)')
 
+    async with websockets.connect(uri, origin=origin) as ws:
+        buf = ''
+        while True:
+            r = await ws.recv()
+            buf += r.decode('big5', 'ignore')
+
+            if '請輸入代號' in buf:
+                break
+
+        await ws.send((login_username + "\r\n").encode('utf-8'))
+        buf = ''
+        while True:
+            r = await ws.recv()
+            buf += r.decode('big5', 'ignore')
+
+            if '請輸入您的密碼' in buf:
+                break
+
+        await ws.send((login_password + "\r\n").encode('utf-8'))
+
+        await ws.send("\x1b[OD\x1b[ODt\r\nq\r\n".encode('utf-8'))
+
+        buf = ''
+        while True:
+            r = await ws.recv()
+            buf += r.decode('big5', 'ignore')
+
+            if '請輸入使用者代號' in buf:
+                break
+
+        await ws.send((username + "\r\n").encode('utf-8'))
+
+        buf = ''
+        while True:
+            r = await ws.recv()
+            buf += r.decode('big5', 'ignore')
+
+            if '請按任意鍵繼續' in buf:
+                break
+
+        t = home_re.search(buf)
+        if t is not None:
+            return t[1]
+
     return None
 
 @app.route('/user/<username>')
