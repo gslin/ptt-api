@@ -18,8 +18,7 @@ def robotstxt():
     bottle.response.set_header('Content-Type', 'text/plain')
     return '#\nUser-agent: *\nDisallow: /\n'
 
-@app.route('/user/<username>')
-def user(username):
+async def get_user_ip(username):
     origin = 'https://term.ptt.cc'
     uri = 'wss://ws.ptt.cc/bbs'
 
@@ -30,6 +29,16 @@ def user(username):
     login_username = config['default']['username']
 
     home_re = re.compile('《上次故鄉》(\d+\.\d+\.\d+\.\d+)')
+
+    return None
+
+@app.route('/user/<username>')
+def user(username):
+    loop = asyncio.get_event_loop()
+    ip = loop.run_until_complete(asyncio.gather(get_user_ip(username)))
+    loop.close()
+
+    return ip
 
 if __name__ == '__main__':
     if os.environ.get('PORT'):

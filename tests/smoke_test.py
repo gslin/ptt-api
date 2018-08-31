@@ -14,3 +14,6 @@ def test_index():
 
 def test_robotstxt():
     ptt_api.robotstxt()
+
+def test_user():
+    ptt_api.user('gslin')
