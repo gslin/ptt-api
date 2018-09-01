@@ -20,7 +20,7 @@ def robotstxt():
     bottle.response.set_header('Content-Type', 'text/plain')
     return '#\nUser-agent: *\nDisallow: /\n'
 
-async def get_user_ip(username):
+async def get_user_ip(id):
     origin = 'https://term.ptt.cc'
     uri = 'wss://ws.ptt.cc/bbs'
 
@@ -67,7 +67,7 @@ async def get_user_ip(username):
                 break
 
         logging.info('Query...')
-        await ws.send((username + "\r\n").encode('utf-8'))
+        await ws.send((id + "\r\n").encode('utf-8'))
 
         buf = ''
         while True:
@@ -83,16 +83,16 @@ async def get_user_ip(username):
 
     return None
 
-@app.route('/user/<username>')
-def user(username):
+@app.route('/user/<id>')
+def user(id):
     loop = asyncio.get_event_loop()
-    ip = loop.run_until_complete(asyncio.gather(get_user_ip(username)))
+    ip = loop.run_until_complete(asyncio.gather(get_user_ip(id)))
     loop.close()
 
     bottle.response.set_header('Cache-Control', 'max-age=60,public')
     bottle.response.set_header('Content-Type', 'application/json')
 
-    return json.dumps({'id': username, 'ip': ip})
+    return json.dumps({'id': id, 'ip': ip})
 
 if __name__ == '__main__':
     if os.environ.get('PORT'):
