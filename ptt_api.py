@@ -40,46 +40,63 @@ async def get_user_ip(id):
             buf += r.decode('big5', 'ignore')
 
             if '請輸入代號' in buf:
-                break
+                logging.info('Sending username...')
+                await ws.send((login_username + "\r").encode('utf-8'))
 
-        logging.info('Sending username...')
-        await ws.send((login_username + "\r\n").encode('utf-8'))
-        buf = ''
-        while True:
-            r = await ws.recv()
-            buf += r.decode('big5', 'ignore')
+                buf = ''
+                continue
 
             if '請輸入您的密碼' in buf:
-                break
+                logging.info('Sending password...')
+                await ws.send((login_password + "\r").encode('utf-8'))
 
-        logging.info('Sending password...')
-        await ws.send((login_password + "\r\n").encode('utf-8'))
+                buf = ''
+                continue
 
-        logging.info('Moving to menu...')
-        await ws.send("n\r\n\x1b[OD\x1b[ODt\r\nq\r\n".encode('utf-8'))
+            if '您想刪除其他重複登入的連線嗎' in buf:
+                await ws.send("n\r".encode('utf-8'))
 
-        buf = ''
-        while True:
-            r = await ws.recv()
-            buf += r.decode('big5', 'ignore')
+                buf = ''
+                continue
+
+            if '您要刪除以上錯誤嘗試的記錄嗎' in buf:
+                await ws.send("n\r".encode('utf-8'))
+
+                buf = ''
+                continue
+
+            if '請勿頻繁登入以免造成系統過度負荷' in buf:
+                await ws.send("\r".encode('utf-8'))
+
+                buf = ''
+                continue
+
+            if '休閒聊天區' in buf:
+                await ws.send("t\rq\r".encode('utf-8'))
+
+                buf = ''
+                continue
 
             if '請輸入使用者代號' in buf:
+                logging.info('Query...')
+                await ws.send((id + "\r").encode('utf-8'))
+
+                buf = ''
+                continue
+
+            if '上次故鄉' in buf:
+                t = home_re.search(buf)
+                if t is not None:
+                    return t[1]
+
                 break
-
-        logging.info('Query...')
-        await ws.send((id + "\r\n").encode('utf-8'))
-
-        buf = ''
-        while True:
-            r = await ws.recv()
-            buf += r.decode('big5', 'ignore')
 
             if '請按任意鍵繼續' in buf:
-                break
+                logging.info('Pressing enter...')
+                await ws.send("\r".encode('utf-8'))
 
-        t = home_re.search(buf)
-        if t is not None:
-            return t[1]
+                buf = ''
+                continue
 
     return None
 
