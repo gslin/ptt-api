@@ -56,7 +56,7 @@ async def get_user_ip(username):
         await ws.send((login_password + "\r\n").encode('utf-8'))
 
         logging.info('Moving to menu...')
-        await ws.send("\x1b[OD\x1b[ODt\r\nq\r\n".encode('utf-8'))
+        await ws.send("n\r\n\x1b[OD\x1b[ODt\r\nq\r\n".encode('utf-8'))
 
         buf = ''
         while True:
