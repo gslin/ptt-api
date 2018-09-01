@@ -103,7 +103,7 @@ async def get_user_ip(id):
 @app.route('/user/<id>')
 def user(id):
     loop = asyncio.get_event_loop()
-    ip = loop.run_until_complete(asyncio.gather(get_user_ip(id)))
+    ip, = loop.run_until_complete(asyncio.gather(get_user_ip(id)))
     loop.close()
 
     bottle.response.set_header('Cache-Control', 'max-age=60,public')
