@@ -4,6 +4,7 @@ import asyncio
 import bottle
 import configparser
 import json
+import logging
 import os
 import re
 import websockets
@@ -31,6 +32,7 @@ async def get_user_ip(username):
 
     home_re = re.compile('《上次故鄉》(\d+\.\d+\.\d+\.\d+)')
 
+    logging.info('Connecting...')
     async with websockets.connect(uri, timeout=3, origin=origin) as ws:
         buf = ''
         while True:
@@ -40,6 +42,7 @@ async def get_user_ip(username):
             if '請輸入代號' in buf:
                 break
 
+        logging.info('Sending username...')
         await ws.send((login_username + "\r\n").encode('utf-8'))
         buf = ''
         while True:
@@ -49,8 +52,10 @@ async def get_user_ip(username):
             if '請輸入您的密碼' in buf:
                 break
 
+        logging.info('Sending password...')
         await ws.send((login_password + "\r\n").encode('utf-8'))
 
+        logging.info('Moving to menu...')
         await ws.send("\x1b[OD\x1b[ODt\r\nq\r\n".encode('utf-8'))
 
         buf = ''
@@ -61,6 +66,7 @@ async def get_user_ip(username):
             if '請輸入使用者代號' in buf:
                 break
 
+        logging.info('Query...')
         await ws.send((username + "\r\n").encode('utf-8'))
 
         buf = ''
