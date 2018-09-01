@@ -44,6 +44,7 @@ push:
 	git push -v origin master
 
 test:
+	rm -f .coverage
 	nosetests --cover-package ptt_api --no-byte-compile --with-coverage
 
 _git_dirty:
