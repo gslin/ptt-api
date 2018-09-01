@@ -3,14 +3,15 @@
 import bottle
 import ptt_api
 
-def test_index():
-    try:
-        ptt_api.index()
-    except bottle.HTTPResponse:
-        assert True
-        return
+class smoke_test:
+    def test_index(self):
+        try:
+            ptt_api.index()
+        except bottle.HTTPResponse:
+            assert True
+            return
 
-    assert False
+        assert False
 
-def test_robotstxt():
-    ptt_api.robotstxt()
+    def test_robotstxt(self):
+        ptt_api.robotstxt()
