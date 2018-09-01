@@ -92,7 +92,7 @@ def user(username):
     bottle.response.set_header('Cache-Control', 'max-age=60,public')
     bottle.response.set_header('Content-Type', 'application/json')
 
-    return json.dumps({'ip': ip})
+    return json.dumps({'id': username, 'ip': ip})
 
 if __name__ == '__main__':
     if os.environ.get('PORT'):
