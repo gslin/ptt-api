@@ -36,7 +36,10 @@ async def get_user_ip(id):
     async with websockets.connect(uri, timeout=3, origin=origin) as ws:
         buf = ''
         while True:
+            logging.info('Receving...')
             r = await ws.recv()
+            logging.info('Receved...')
+
             buf += r.decode('big5', 'ignore')
 
             if '請輸入代號' in buf:
